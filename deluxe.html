@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Special Packages on Monthly Basis Rooms | A Copper Lodge</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<section class="booking-room">
+  <h2>Enter Your Personal Information</h2>
+
+  <form id="bookingForm">
+    <label for="name">Full Name:</label>
+    <input type="text" id="name" placeholder="Your Name" required>
+
+    <label for="phone">Phone Number:</label>
+    <input type="tel" id="phone" placeholder="Your Phone" required>
+
+    <label for="visitorType">Visitor Type:</label>
+    <select id="visitorType" onchange="toggleIDField()">
+      <option value="">Select Type</option>
+      <option value="local">Local (CNIC)</option>
+      <option value="foreigner">Foreigner (Passport)</option>
+    </select>
+
+    <label id="idLabel" for="idNumber">CNIC / Passport Number:</label>
+    <input type="text" id="idNumber" placeholder="Enter CNIC or Passport" required>
+
+    <input type="hidden" id="roomType" value="Single Room">
+
+    <button type="submit">Send Booking to WhatsApp</button>
+  </form>
+</section>
+
+<script>
+// Change label placeholder based on visitor type
+function toggleIDField(){
+  const visitorType = document.getElementById('visitorType').value;
+  const idLabel = document.getElementById('idLabel');
+  const idInput = document.getElementById('idNumber');
+
+  if(visitorType === 'foreigner'){
+    idLabel.textContent = "Passport Number:";
+    idInput.placeholder = "Enter Passport Number";
+  } else {
+    idLabel.textContent = "CNIC Number:";
+    idInput.placeholder = "Enter CNIC (e.g. 12345-1234567-1)";
+  }
+}
+
+// Validate CNIC/Passport
+function validateID(id, type){
+  if(type === 'local'){ // CNIC format: 5-7-1 digits
+    const cnicRegex = /^\d{5}-\d{7}-\d{1}$/;
+    return cnicRegex.test(id);
+  } else if(type === 'foreigner'){ // passport: allow letters+digits, min 6 chars
+    const passportRegex = /^[A-Za-z0-9]{6,20}$/;
+    return passportRegex.test(id);
+  }
+  return false;
+}
+
+// Handle form submission
+document.getElementById('bookingForm').addEventListener('submit', function(e){
+  e.preventDefault();
+
+  const name = document.getElementById('name').value.trim();
+  const phone = document.getElementById('phone').value.trim();
+  const id = document.getElementById('idNumber').value.trim();
+  const visitorType = document.getElementById('visitorType').value;
+  const room = document.getElementById('roomType').value;
+
+  if(!name || !phone || !id || !visitorType){
+    alert("Please fill all fields!");
+    return;
+  }
+
+  if(!validateID(id, visitorType)){
+    alert("Invalid " + (visitorType==='local'?'CNIC':'Passport') + ". Please re-enter.");
+    return;
+  }
+
+  const message = `Booking Request:%0AName: ${name}%0APhone: ${phone}%0AID: ${id}%0ARoom: ${room}`;
+  const whatsappNumber = "923005116013"; // your WhatsApp number with country code
+  const url = `https://wa.me/${whatsappNumber}?text=${message}`;
+  window.open(url, "_blank");
+});
+</script>
+
+</body>
+</html>

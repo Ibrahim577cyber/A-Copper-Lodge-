@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>A Copper Lodge | Booking</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <header class="hero">
+    <h1>Room Booking</h1>
+    <p>Enter your details to book a room</p>
+  </header>
+
+  <section class="booking-form-section">
+    <form id="bookingForm">
+      <label for="name">Full Name:</label>
+      <input type="text" id="name" name="name" required>
+
+      <label for="phone">Phone Number:</label>
+      <input type="tel" id="phone" name="phone" required>
+
+      <label for="visitorType">Visitor Type:</label>
+      <select id="visitorType" name="visitorType" required onchange="toggleIDField()">
+        <option value="">Select Type</option>
+        <option value="local">Local (CNIC)</option>
+        <option value="foreigner">Foreigner (Passport)</option>
+      </select>
+
+      <label for="idNumber" id="idLabel">CNIC / Passport Number:</label>
+      <input type="text" id="idNumber" name="idNumber" required placeholder="Enter CNIC or Passport">
+
+      <button type="submit">Submit Booking</button>
+    </form>
+  </section>
+
+  <footer>
+    <p>© 2026 A Copper Lodge</p>
+  </footer>
+
+  <script>
+    function toggleIDField() {
+      const visitorType = document.getElementById('visitorType').value;
+      const idLabel = document.getElementById('idLabel');
+      const idInput = document.getElementById('idNumber');
+
+      if(visitorType === 'foreigner') {
+        idLabel.textContent = "Passport Number:";
+        idInput.placeholder = "Enter Passport Number";
+      } else {
+        idLabel.textContent = "CNIC Number:";
+        idInput.placeholder = "Enter CNIC";
+      }
+    }
+
+    document.getElementById('bookingForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      alert("Booking request submitted!");
+      this.reset();
+    });
+  </script>
+
+</body>
+</html>
